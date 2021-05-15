@@ -163,16 +163,13 @@ func TestLeague(t *testing.T) {
 		got := getLeagueFromResponse(t, response.Body)
 		assertStatus(t, response.Code, http.StatusOK)
 		assertLeague(t, got, wantedLeague)
-
-		assertStatus(t, response.Code, http.StatusOK)
-		assertLeague(t, got, wantedLeague)
 		assertContentType(t, response, jsonContentType)
 	})
 }
 
 func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
 	t.Helper()
-	err := json.NewDecoder(body).Decode(&league)
+	league, err := NewLeague(body)
 	if err != nil {
 		t.Fatalf("Unable to parse response from server %q into slice of Player, '%v'", body, err)
 	}
